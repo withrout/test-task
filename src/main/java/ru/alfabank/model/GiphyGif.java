@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.alfabank.deserialaizer.GiphyGifDeserializer;
 
+import java.util.Map;
+
 @Setter
 @Getter
 @AllArgsConstructor
 @JsonDeserialize(using = GiphyGifDeserializer.class)
 public class GiphyGif {
     private String title;
-    private String url;
+    private Map<Integer, String> urls;
 }

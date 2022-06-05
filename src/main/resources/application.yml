@@ -16,7 +16,7 @@ giphy:
     rich: rich
     broke: broke
     zero: zero
-  limit: 1
+  limit: 20
 project:
   urls:
     rate: /api/exchange/rates/rate

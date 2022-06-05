@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.alfabank.model.GiphyGif;
 
 
-@FeignClient(name = "giphy", url = "${giphy.urls.base}?api_key=${giphy.api.key}")
+@FeignClient(name = "giphy", url = "${giphy.urls.base}?api_key=${giphy.api.key}&limit=${giphy.limit}")
 public interface GiphyFeignClient {
     @GetMapping("${giphy.urls.search}")
-    GiphyGif getSearchGifResult(@RequestParam String q, @RequestParam String limit);
+    GiphyGif getSearchGifResult(@RequestParam String q);
 }
