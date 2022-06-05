@@ -1,7 +1,7 @@
 package ru.alfabank.service;
 
-import ru.alfabank.model.GiphyGif;
+import ru.alfabank.dto.GifDto;
 
 public interface GiphyService {
-    GiphyGif takeGif(String code);
+    GifDto takeGif(String code);
 }

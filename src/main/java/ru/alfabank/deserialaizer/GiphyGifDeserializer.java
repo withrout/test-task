@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import ru.alfabank.model.GiphyGif;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class GiphyGifDeserializer extends StdDeserializer<GiphyGif> {
 
@@ -20,9 +21,14 @@ public class GiphyGifDeserializer extends StdDeserializer<GiphyGif> {
 
     @Override
     public GiphyGif deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        var array = (JsonNode) p.getCodec().readTree(p).get("data").get(0);
-        var url = array.get("images").get("original").get("webp").asText();
-        var name = array.get("title").asText();
-        return new GiphyGif(name, url);
+        var array = (JsonNode) p.getCodec().readTree(p);
+        var urlsGifMap = new HashMap<Integer, String>();
+        var title = "";
+        for (int i = 0; i < array.get("data").size(); i++) {
+            var field = array.get("data").get(i);
+            title = field.get("title").asText();
+            urlsGifMap.put(i + 1, field.get("images").get("original").get("url").asText());
+        }
+        return new GiphyGif(title, urlsGifMap);
     }
 }

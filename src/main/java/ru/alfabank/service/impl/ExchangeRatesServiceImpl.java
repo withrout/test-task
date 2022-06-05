@@ -3,7 +3,7 @@ package ru.alfabank.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.alfabank.client.ExchangeRatesFeignClient;
-import ru.alfabank.model.ExchangeRate;
+import ru.alfabank.dto.RatesDto;
 import ru.alfabank.service.ExchangeRatesService;
 
 import java.time.Instant;
@@ -28,15 +28,23 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
     }
 
     @Override
-    public ExchangeRate takeRateByCode(String code) {
-        return feignClient.takeRateByCode(code);
+    public RatesDto takeRateByCode(String code) {
+        return RatesDto.builder()
+                .rate(feignClient.takeRateByCode(code)
+                        .getRates()
+                        .get(code))
+                .build();
     }
 
     @Override
-    public ExchangeRate takeYesterdayRateByCode(String code) {
+    public RatesDto takeYesterdayRateByCode(String code) {
         var dateOfYesterday = (LocalDate.ofInstant(Instant.now(), ZoneId.of("UTC"))
                 .minusDays(1))
                 .format(DateTimeFormatter.ISO_DATE);
-        return feignClient.takeRateByDateAndCode(dateOfYesterday, code);
+        return RatesDto.builder()
+                .rate(feignClient.takeRateByDateAndCode(dateOfYesterday, code)
+                        .getRates()
+                        .get(code))
+                .build();
     }
 }

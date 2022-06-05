@@ -1,5 +1,6 @@
 package ru.alfabank.service;
 
+import ru.alfabank.dto.RatesDto;
 import ru.alfabank.model.ExchangeRate;
 
 import java.util.List;
@@ -9,6 +10,6 @@ import java.util.List;
  */
 public interface ExchangeRatesService {
     List<String> takeAllCurrencies();
-    ExchangeRate takeRateByCode(String code);
-    ExchangeRate takeYesterdayRateByCode(String code);
+    RatesDto takeRateByCode(String code);
+    RatesDto takeYesterdayRateByCode(String code);
 }
