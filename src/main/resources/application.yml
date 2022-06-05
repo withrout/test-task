@@ -1,0 +1,23 @@
+exchange:
+  api:
+    key: 0e93de1be2d949089c50165c7edf5913
+    urls:
+      base: https://openexchangerates.org/api
+      currencies: /currencies.json
+      latest: /latest.json
+      historical: /historical
+giphy:
+  api:
+    key: RlN4m1J3pigZ3886XGFNEB2kQ2OZRgKV
+  urls:
+    base: https://api.giphy.com/v1/gifs
+    search: /search
+  q:
+    rich: rich
+    broke: broke
+    zero: zero
+  limit: 1
+project:
+  urls:
+    rate: /api/exchange/rates/rate
+    gif: /giphy
