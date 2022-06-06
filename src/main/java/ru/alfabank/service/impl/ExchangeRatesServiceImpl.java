@@ -23,6 +23,10 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
     private static final String TAKE_RATE_ERROR = "Произошла ошибка при получении курса валюты";
     private static final String TAKE_YESTERDAY_RATE_ERROR = "Произошла ошибка при получении вчерашнего курса валюты";
 
+    private static final String TAKE_ALL_CURRENCIES_LOG = "Получен список курсов валют в количестве: {}";
+    private static final String TAKE_RATE_LOG = "Запрошен курс валюты, код: {}";
+    private static final String TAKE_YESTERDAY_RATE_LOG = "Запрошен вчерашний курс валюты, код: {}";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeRatesService.class);
 
     private final ExchangeRatesFeignClient feignClient;
@@ -35,10 +39,9 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
                     .keySet()
                     .stream()
                     .toList();
-            LOGGER.info("Получен список курсов валют в количестве: {}", currenciesList.size());
+            LOGGER.info(TAKE_ALL_CURRENCIES_LOG, currenciesList.size());
             return currenciesList;
         } catch (ExchangeRateServiceException e) {
-            LOGGER.warn("Произошла ошибка при запросе к API курсов валют!");
             throw new ExchangeRateServiceException(TAKE_ALL_CURRENCIES_ERROR);
         }
     }
@@ -47,12 +50,11 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
     public RatesDto takeRateByCode(String code) {
         try {
             var rate = feignClient.takeRateByCode(code).getRates().get(code);
-            LOGGER.info("Запрошен курс валюты, код: {}", code);
+            LOGGER.info(TAKE_RATE_LOG, code);
             return RatesDto.builder()
                     .rate(rate)
                     .build();
         } catch (ExchangeRateServiceException e) {
-            LOGGER.warn("Произошла ошибка при запросе к API курсов валют!");
             throw new ExchangeRateServiceException(TAKE_RATE_ERROR);
         }
     }
@@ -64,12 +66,13 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
                     .minusDays(1))
                     .format(DateTimeFormatter.ISO_DATE);
             var rate = feignClient.takeRateByDateAndCode(dateOfYesterday, code).getRates().get(code);
-            LOGGER.info("Запрошен вчерашний курс валюты, код: {}", code);
+            LOGGER.info(TAKE_YESTERDAY_RATE_LOG, code);
             return RatesDto.builder()
-                    .rate(rate)
+                    .rate(feignClient.takeRateByDateAndCode(dateOfYesterday, code)
+                            .getRates()
+                            .get(code))
                     .build();
         } catch (ExchangeRateServiceException e) {
-            LOGGER.warn("Произошла ошибка при запросе к API курсов валют!");
             throw new ExchangeRateServiceException(TAKE_YESTERDAY_RATE_ERROR);
         }
     }

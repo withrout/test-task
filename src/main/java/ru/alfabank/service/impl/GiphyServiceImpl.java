@@ -19,6 +19,7 @@ import java.util.Random;
 public class GiphyServiceImpl implements GiphyService {
 
     private static final String GIPHY_ERROR = "Произошла ошибка при взаимодействии с сервисом гифов";
+    private static final String GIPHY_LOG = "Получен GIF с названием: {}";
     private static final Logger LOGGER = LoggerFactory.getLogger(GiphyService.class);
 
     @Value("#{${giphy.q}}")
@@ -43,7 +44,7 @@ public class GiphyServiceImpl implements GiphyService {
         var toDayRate = ratesService.takeRateByCode(code).getRate();
         var yesterdayRate = ratesService.takeYesterdayRateByCode(code).getRate();
         var gif = feignClient.getSearchGifResult(keys.get(Double.compare(toDayRate, yesterdayRate)));
-        LOGGER.info("Получен GIF с названием: {}", gif.getTitle());
+        LOGGER.info(GIPHY_LOG, gif.getTitle());
         return GifDto.builder()
                 .title(gif.getTitle() != null ? gif.getTitle() : "")
                 .url(gif.getUrls().get(new Random().nextInt(Integer.parseInt(limit))))
