@@ -66,9 +66,7 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
             var rate = feignClient.takeRateByDateAndCode(dateOfYesterday, code).getRates().get(code);
             LOGGER.info(TAKE_YESTERDAY_RATE_LOG, code);
             return RatesDto.builder()
-                    .rate(feignClient.takeRateByDateAndCode(dateOfYesterday, code)
-                            .getRates()
-                            .get(code))
+                    .rate(rate)
                     .build();
         } catch (ExchangeRateServiceException e) {
             throw new ExchangeRateServiceException(TAKE_YESTERDAY_RATE_ERROR);
