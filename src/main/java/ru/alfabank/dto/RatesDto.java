@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO для отображения курса валют
+ */
 @Setter
 @Getter
 @Builder
