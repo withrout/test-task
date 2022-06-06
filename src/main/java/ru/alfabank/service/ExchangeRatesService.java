@@ -3,6 +3,7 @@ package ru.alfabank.service;
 import ru.alfabank.dto.RatesDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Сервис работы с API валют
@@ -11,9 +12,9 @@ public interface ExchangeRatesService {
 
     /**
      * Получить все доступные валють
-     * @return список валют кодов
+     * @return словарь валют кодов
      */
-    List<String> takeAllCurrencies();
+    Map<String, String> takeAllCurrencies();
 
     /**
      * Поулчить курс валюты по коду

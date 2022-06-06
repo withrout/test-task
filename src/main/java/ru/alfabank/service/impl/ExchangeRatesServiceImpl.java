@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -32,13 +33,10 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
     private final ExchangeRatesFeignClient feignClient;
 
     @Override
-    public List<String> takeAllCurrencies() {
+    public Map<String, String> takeAllCurrencies() {
         try {
             var currenciesList = feignClient
-                    .takeAllCurrencies()
-                    .keySet()
-                    .stream()
-                    .toList();
+                    .takeAllCurrencies();
             LOGGER.info(TAKE_ALL_CURRENCIES_LOG, currenciesList.size());
             return currenciesList;
         } catch (ExchangeRateServiceException e) {
