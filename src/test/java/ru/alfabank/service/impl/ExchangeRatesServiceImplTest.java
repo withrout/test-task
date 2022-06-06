@@ -29,13 +29,14 @@ class ExchangeRatesServiceImplTest {
 
     @Test
     void takeAllCurrencies() {
-        var code = "CODE";
+        var title = "TITLE";
+        var code = "code";
         when(exchangeRatesFeignClient.takeAllCurrencies()).thenReturn(
-                Map.of(code, "TITLE")
+                Map.of(code, title)
         );
         var result = exchangeRatesService.takeAllCurrencies();
         assertNotNull(result);
-        assertEquals(code, result.get(0));
+        assertEquals(title, result.get(code));
     }
 
     @Test
