@@ -11,7 +11,7 @@ import ru.alfabank.service.GiphyService;
 
 @Controller
 @RequiredArgsConstructor
-public class MainController {
+public class WebController {
 
     private final ExchangeRatesService ratesService;
     private final GiphyService giphyService;
@@ -24,7 +24,7 @@ public class MainController {
 
     @GetMapping("/giphy")
     public String giphy(Model model, @RequestParam String code) {
-        var gif = giphyService.takeGif(code);
+        var gif = giphyService.takeGifByCurrencyCode(code);
         model.addAttribute("gif", gif);
         return "giphy";
     }

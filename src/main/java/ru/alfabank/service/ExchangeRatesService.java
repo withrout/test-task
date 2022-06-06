@@ -1,7 +1,6 @@
 package ru.alfabank.service;
 
 import ru.alfabank.dto.RatesDto;
-import ru.alfabank.model.ExchangeRate;
 
 import java.util.List;
 

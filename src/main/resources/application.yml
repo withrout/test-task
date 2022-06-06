@@ -12,10 +12,11 @@ giphy:
   urls:
     base: https://api.giphy.com/v1/gifs
     search: /search
-  q:
-    rich: rich
-    broke: broke
-    zero: zero
+  q: '{
+    1: "rich",
+    -1: "broke",
+    0: "zero"
+  }'
   limit: 20
 project:
   urls:

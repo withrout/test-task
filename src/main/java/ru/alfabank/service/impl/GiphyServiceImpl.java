@@ -5,54 +5,44 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.alfabank.client.GiphyFeignClient;
 import ru.alfabank.dto.GifDto;
-import ru.alfabank.model.GiphyGif;
+import ru.alfabank.exceptions.GifServiceException;
 import ru.alfabank.service.ExchangeRatesService;
 import ru.alfabank.service.GiphyService;
 
+import java.util.Map;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class GiphyServiceImpl implements GiphyService {
 
-    @Value("${giphy.q.rich}")
-    private String rich;
+    private static final String GIPHY_ERROR = "Произошла ошибка при взаимодействии с сервисом гифов";
 
-    @Value("${giphy.q.broke}")
-    private String broke;
-
-    @Value("${giphy.q.zero}")
-    private String zero;
+    @Value("#{${giphy.q}}")
+    private Map<Integer, String> keys;
 
     @Value("${giphy.limit}")
     private String limit;
 
-    private final ExchangeRatesService ratesService;
     private final GiphyFeignClient feignClient;
+    private final ExchangeRatesService ratesService;
 
     @Override
-    public GifDto takeGif(String code) {
-        return getGiphy(code);
+    public GifDto takeGifByCurrencyCode(String code) {
+        try {
+            return getGiphy(code);
+        } catch (GifServiceException e) {
+            throw new GifServiceException(GIPHY_ERROR);
+        }
     }
 
     private GifDto getGiphy(String code) {
         var toDayRate = ratesService.takeRateByCode(code).getRate();
         var yesterdayRate = ratesService.takeYesterdayRateByCode(code).getRate();
-        var gif = getGifByResultCompare(toDayRate, yesterdayRate);
+        var gif = feignClient.getSearchGifResult(keys.get(Double.compare(toDayRate, yesterdayRate)));
         return GifDto.builder()
-                .title(gif.getTitle())
+                .title(gif.getTitle() != null ? gif.getTitle() : "")
                 .url(gif.getUrls().get(new Random().nextInt(Integer.parseInt(limit))))
                 .build();
-    }
-
-    private GiphyGif getGifByResultCompare(Double toDayRate, Double yesterdayRate) {
-        var compareResult = Double.compare(toDayRate, yesterdayRate);
-        if (compareResult > 0) {
-            return feignClient.getSearchGifResult(rich);
-        } else if (compareResult < 0) {
-            return feignClient.getSearchGifResult(broke);
-        } else {
-            return feignClient.getSearchGifResult(zero);
-        }
     }
 }
