@@ -12,11 +12,10 @@ import ru.alfabank.service.GiphyService;
 @RequiredArgsConstructor
 public class RestApiController {
 
-//    private final ExchangeRatesService ratesService;
     private final GiphyService giphyService;
 
     @GetMapping("/api/gifs/gif")
-    ResponseEntity<GifDto> getGif(@RequestParam String code) {
-        return ResponseEntity.ok(giphyService.takeGif(code));
+    ResponseEntity<GifDto> takeGifByCode(@RequestParam String code) {
+        return ResponseEntity.ok(giphyService.takeGifByCurrencyCode(code));
     }
 }
