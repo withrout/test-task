@@ -9,6 +9,9 @@ import ru.alfabank.model.GiphyGif;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Кастомный десериализатор для разбора модели с API GIF
+ */
 public class GiphyGifDeserializer extends StdDeserializer<GiphyGif> {
 
     public GiphyGifDeserializer() {

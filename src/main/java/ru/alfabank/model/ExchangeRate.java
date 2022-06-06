@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.util.Map;
 
+/**
+ * Модель курсов валют
+ */
 @Setter
 @Getter
 @AllArgsConstructor

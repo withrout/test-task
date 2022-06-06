@@ -8,6 +8,9 @@ import ru.alfabank.deserialaizer.GiphyGifDeserializer;
 
 import java.util.Map;
 
+/**
+ * Модель GIF
+ */
 @Setter
 @Getter
 @AllArgsConstructor
